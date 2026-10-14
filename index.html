@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LearnHub – University Online Learning Platform (Prototype)</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#F4F6FB;--card:#fff;--tx:#1B2340;--mu:#5B6480;--pr:#3D4FD6;--prt:#fff;--ac:#14A38B;--bd:#E1E5F0;--wn:#F59E0B;--soft:#E8EBFF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10142A;--card:#1A2040;--tx:#EEF0FA;--mu:#A3ABC9;--pr:#7B8CFF;--prt:#10142A;--ac:#3DD6BC;--bd:#2B3360;--soft:#252C5A}}
+:root[data-theme="dark"]{--bg:#10142A;--card:#1A2040;--tx:#EEF0FA;--mu:#A3ABC9;--pr:#7B8CFF;--prt:#10142A;--ac:#3DD6BC;--bd:#2B3360;--soft:#252C5A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,"Segoe UI",system-ui,Arial,sans-serif;font-size:15px}
+button{font:inherit;cursor:pointer}
+.app{display:flex;min-height:100vh}
+nav{width:210px;background:var(--card);border-right:1px solid var(--bd);padding:16px 10px;display:flex;flex-direction:column;gap:4px}
+.logo{font-weight:800;font-size:19px;color:var(--pr);padding:4px 10px 14px}
+nav button{display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--mu);padding:10px 12px;border-radius:10px;text-align:left;width:100%}
+nav button.on,nav button:hover{background:var(--soft);color:var(--pr);font-weight:600}
+main{flex:1;padding:22px;max-width:980px;min-width:0}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 10px}.sub{color:var(--mu);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.course{cursor:pointer;border-top:5px solid var(--c)}.course:hover{box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--ac)}
+.btn{background:var(--pr);color:var(--prt);border:0;border-radius:10px;padding:9px 16px;font-weight:600}
+.btn.alt{background:var(--soft);color:var(--pr)}
+.tag{font-size:12px;padding:3px 9px;border-radius:20px;background:var(--soft);color:var(--pr)}.tag.w{background:#FDEBC8;color:#8A5A00}.tag.g{background:#D3F5EC;color:#0B6B5A}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd)}.row:last-child{border:0}
+.tabs{display:flex;gap:6px;margin-bottom:14px}.tabs button{border:1px solid var(--bd);background:var(--card);color:var(--mu);padding:7px 14px;border-radius:20px}.tabs button.on{background:var(--pr);color:var(--prt);border-color:var(--pr)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--bd)}th{color:var(--mu);font-size:13px}
+.scr{display:none}.scr.on{display:block}
+#login{min-height:100vh;display:none;align-items:center;justify-content:center;padding:20px}#login.on{display:flex}
+.lbox{width:100%;max-width:360px}
+input,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;margin:4px 0 12px}
+.video{background:linear-gradient(135deg,#3D4FD6,#14A38B);border-radius:12px;height:190px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:42px;margin-bottom:12px}
+.msgs{display:flex;flex-direction:column;gap:8px;min-height:180px;margin-bottom:10px}.m{padding:9px 13px;border-radius:14px;max-width:75%}.m.f{background:var(--soft);align-self:flex-start}.m.me{background:var(--pr);color:var(--prt);align-self:flex-end}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:24px;display:none;z-index:9}
+.top{display:flex;justify-content:space-between;align-items:center}
+@media(max-width:700px){.app{flex-direction:column}nav{width:100%;flex-direction:row;overflow-x:auto;padding:8px}.logo{display:none}nav button{width:auto;white-space:nowrap}main{padding:14px}}
+</style></head><body>
+<div id="login" class="on"><div class="card lbox"><div class="logo" style="padding:0 0 6px">🎓 LearnHub</div>
+<p class="sub">Sign in with your university ID</p>
+<label>University ID</label><input id="uid" value="11242500">
+<label>Password</label><input type="password" value="••••••••">
+<button class="btn" style="width:100%" onclick="go('app')">Sign in</button>
+<p style="font-size:12px;color:var(--mu);margin:12px 0 0">Prototype only – any input works.</p></div></div>
+
+<div class="app" id="app" style="display:none">
+<nav aria-label="Main navigation"><div class="logo">🎓 LearnHub</div>
+<button data-s="dash" class="on">🏠 Dashboard</button><button data-s="courses">📚 My Courses</button>
+<button data-s="assign">📝 Assignments</button><button data-s="grades">📊 Grades</button><button data-s="msg">💬 Messages</button>
+<button onclick="go('login')" style="margin-top:auto">↩ Sign out</button></nav>
+<main>
+<section class="scr on" id="dash"><div class="top"><div><h1>Welcome back, Vanshika 👋</h1><p class="sub">CSE · Semester 5 · Section B</p></div></div>
+<div class="grid" style="margin-bottom:16px">
+<div class="card"><h2>Next live lecture</h2><b>UI/UX Design</b><br><span style="color:var(--mu)">Today, 11:00 AM · Dr. Rohini</span><br><br><button class="btn" onclick="open_('uiux','lec')">Join lecture</button></div>
+<div class="card"><h2>Due soon</h2><b>Wireframe Submission</b><br><span style="color:var(--mu)">UI/UX Design · in 2 days</span><br><br><button class="btn alt" onclick="show('assign')">Submit now</button></div>
+<div class="card"><h2>Latest grade</h2><b style="font-size:26px;color:var(--ac)">18 / 20</b><br><span style="color:var(--mu)">Quiz 2 · Web Technologies</span></div></div>
+<h2>Continue learning</h2><div class="grid" id="dcourses"></div></section>
+
+<section class="scr" id="courses"><h1>My Courses</h1><p class="sub">Tap a course to open materials and lectures</p><div class="grid" id="clist"></div></section>
+
+<section class="scr" id="detail"><button class="btn alt" onclick="show('courses')">← Back</button>
+<h1 id="dt" style="margin-top:14px"></h1><p class="sub" id="dp"></p>
+<div class="tabs"><button data-t="mat" class="on">Study Material</button><button data-t="lec">Lectures</button></div>
+<div class="card" id="mat"><div class="row"><span>📄 Unit 1 – Introduction to UI (PDF)</span><button class="btn alt" onclick="toast('Downloading…')">Download</button></div>
+<div class="row"><span>📄 Unit 2 – UX Basics (PDF)</span><button class="btn alt" onclick="toast('Downloading…')">Download</button></div>
+<div class="row"><span>📄 Unit 3 – Wireframing &amp; Storyboarding (PPT)</span><button class="btn alt" onclick="toast('Downloading…')">Download</button></div></div>
+<div class="card" id="lec" style="display:none"><div class="video" onclick="toast('Playing lecture…')" style="cursor:pointer">▶</div>
+<div class="row"><span>🎥 Lecture 7 – User Personas</span><span class="tag g">Recorded</span></div>
+<div class="row"><span>🔴 Lecture 8 – Wireframing (Live 11:00 AM)</span><span class="tag w">Live today</span></div></div></section>
+
+<section class="scr" id="assign"><h1>Assignments</h1><p class="sub">Submit before the deadline</p>
+<div class="card" style="margin-bottom:14px"><div class="row"><div><b>Wireframe Submission</b><br><span style="color:var(--mu)">UI/UX Design · Due in 2 days</span></div><span class="tag w" id="st">Pending</span></div>
+<label>Upload file</label><input type="file"><label>Comments (optional)</label><textarea rows="2" placeholder="Add a note for your faculty"></textarea>
+<button class="btn" onclick="sub()">Submit assignment</button></div>
+<div class="card"><div class="row"><span>Case Study – Web Technologies</span><span class="tag g">Submitted</span></div><div class="row"><span>Lab Record – DBMS</span><span class="tag g">Graded</span></div></div></section>
+
+<section class="scr" id="grades"><h1>Grades</h1><p class="sub">Semester 5 · Internal assessment</p>
+<div class="card"><table><tr><th>Course</th><th>Assessment</th><th>Score</th><th></th></tr>
+<tr><td>UI/UX Design</td><td>Quiz 1</td><td>17/20</td><td style="width:30%"><div class="bar"><i style="width:85%"></i></div></td></tr>
+<tr><td>Web Technologies</td><td>Quiz 2</td><td>18/20</td><td><div class="bar"><i style="width:90%"></i></div></td></tr>
+<tr><td>DBMS</td><td>Lab Record</td><td>14/20</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>Computer Networks</td><td>Mid-term</td><td>32/40</td><td><div class="bar"><i style="width:80%"></i></div></td></tr></table></div></section>
+
+<section class="scr" id="msg"><h1>Messages</h1><p class="sub">Chat with Dr. Rohini · UI/UX Design</p>
+<div class="card"><div class="msgs" id="ms"><div class="m f">Hello! Please submit the wireframes by Friday.</div><div class="m me">Sure ma'am, working on the prototype.</div></div>
+<div style="display:flex;gap:8px"><input id="mi" placeholder="Type a message" style="margin:0"><button class="btn" onclick="send()">Send</button></div></div></section>
+</main></div><div id="toast" role="status"></div>
+<script>
+var C=[["uiux","UI/UX Design","Dr. Rohini",65,"#3D4FD6"],["web","Web Technologies","Dr. Mehta",80,"#14A38B"],["dbms","DBMS","Dr. Sharma",45,"#F59E0B"],["cn","Computer Networks","Dr. Singh",55,"#E5484D"]];
+function $(i){return document.getElementById(i)}
+function card(c){return '<div class="card course" style="--c:'+c[4]+'" onclick="open_(\''+c[0]+'\')"><b>'+c[1]+'</b><br><span style="color:var(--mu)">'+c[2]+'</span><div class="bar"><i style="width:'+c[3]+'%"></i></div><small style="color:var(--mu)">'+c[3]+'% complete</small></div>'}
+$('clist').innerHTML=C.map(card).join('');$('dcourses').innerHTML=C.slice(0,2).map(card).join('');
+function go(w){$('login').className=w=='login'?'on':'';$('app').style.display=w=='app'?'flex':'none';if(w=='app')show('dash')}
+function show(s){document.querySelectorAll('.scr').forEach(function(e){e.classList.toggle('on',e.id==s)});
+document.querySelectorAll('nav button[data-s]').forEach(function(b){b.classList.toggle('on',b.dataset.s==(s=='detail'?'courses':s))});window.scrollTo(0,0)}
+function open_(id,t){var c=C.filter(function(x){return x[0]==id})[0];$('dt').textContent=c[1];$('dp').textContent=c[2];show('detail');tab(t||'mat')}
+function tab(t){$('mat').style.display=t=='mat'?'block':'none';$('lec').style.display=t=='lec'?'block':'none';
+document.querySelectorAll('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t==t)})}
+document.querySelectorAll('nav button[data-s]').forEach(function(b){b.onclick=function(){show(b.dataset.s)}});
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){tab(b.dataset.t)}});
+function toast(m){var t=$('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none'},1800)}
+function sub(){$('st').textContent='Submitted';$('st').className='tag g';toast('Assignment submitted ✓')}
+function send(){var v=$('mi').value.trim();if(!v)return;$('ms').insertAdjacentHTML('beforeend','<div class="m me"></div>');$('ms').lastChild.textContent=v;$('mi').value=''}
+</script></body></html>
